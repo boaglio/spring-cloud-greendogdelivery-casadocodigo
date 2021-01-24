@@ -35,11 +35,21 @@ server:
 #  cloud:
 #    gateway: 
 #      routes:
+#      - id: servidor_maquina_boa
+#        uri: http://localhost:8081
+#        predicates:
+#        - Weight=servidores, 8
+#        - Path=/servidor
 #      - id: maquina_boa
 #        uri: http://localhost:8081
 #        predicates:
 #        - Weight=servidoresDePedidos, 8
 #        - Path=/rest/pedido/novo/** 
+#      - id: servidor_maquina_ruim
+#        uri: http://localhost:8082
+#        predicates:
+#        - Path=/servidor      
+#        - Weight=servidores, 2
 #      - id: maquina_ruim
 #        uri: http://localhost:8082
 #        predicates:
@@ -52,6 +62,11 @@ spring:
   cloud:
     gateway:
       routes:
+      - id: servidor_maquina_boa
+        uri: http://localhost:8081
+        predicates:
+        - Weight=servidores, 8
+        - Path=/servidor
       - id: maquina_boa
         uri: http://localhost:8081
         predicates:
@@ -60,7 +75,12 @@ spring:
         filters:
         - name: RequestSize
           args:
-            maxSize: 5
+            maxSize: 5            
+      - id: servidor_maquina_ruim
+        uri: http://localhost:8082
+        predicates:
+        - Path=/servidor      
+        - Weight=servidores, 2
       - id: maquina_ruim
         uri: http://localhost:8082
         predicates:
