@@ -1,0 +1,73 @@
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+  endpoint:
+    health:
+      show-details: always
+  trace:
+    http:
+      enabled: true        
+        
+server:
+  port: 10000
+
+# um servidor
+# spring:
+#   cloud:
+#     gateway:
+#       routes:
+#       - id: umaMaquina
+#         uri: http://localhost:8081
+#         predicates:
+#         - Path=/rest/pedido/novo/** 
+
+# dois servidores
+#spring:
+#  cloud:
+#    gateway: 
+#      routes:
+#      - id: maquina_boa
+#        uri: http://localhost:8081
+#        predicates:
+#        - Weight=servidoresDePedidos, 8
+#        - Path=/rest/pedido/novo/** 
+#      - id: maquina_ruim
+#        uri: http://localhost:8082
+#        predicates:
+#        - Weight=servidoresDePedidos, 2
+#        - Path=/rest/pedido/novo/** 
+
+
+# dois servidores com filtro de tamanho
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: maquina_boa
+        uri: http://localhost:8081
+        predicates:
+        - Weight=servidoresDePedidos, 8
+        - Path=/rest/pedido/novo/**
+        filters:
+        - name: RequestSize
+          args:
+            maxSize: 5
+      - id: maquina_ruim
+        uri: http://localhost:8082
+        predicates:
+        - Weight=servidoresDePedidos, 2
+        - Path=/rest/pedido/novo/** 
+        filters:
+        - name: RequestSize
+          args:
+            maxSize: 5
+
