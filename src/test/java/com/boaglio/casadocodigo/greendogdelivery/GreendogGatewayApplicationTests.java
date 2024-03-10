@@ -5,31 +5,29 @@ import static org.springframework.web.reactive.function.client.ExchangeFilterFun
 
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class GreendogGatewayApplicationTests {
+class GreendogGatewayApplicationTests {
 
 	@LocalServerPort
 	int port;
 	private WebTestClient client;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		client = WebTestClient.bindToServer().baseUrl("http://localhost:" + port).build();
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void pathRouteWorks() {
 		client.get().uri("/get")
 				.exchange()
@@ -41,7 +39,6 @@ public class GreendogGatewayApplicationTests {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void hostRouteWorks() {
 		client.get().uri("/headers")
 				.header("Host", "www.myhost.org")
@@ -54,7 +51,6 @@ public class GreendogGatewayApplicationTests {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void rewriteRouteWorks() {
 		client.get().uri("/foo/get")
 				.header("Host", "www.rewrite.org")

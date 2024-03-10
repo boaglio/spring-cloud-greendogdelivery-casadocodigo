@@ -1,0 +1,31 @@
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+  endpoint:
+    health:
+      show-details: always
+  trace:
+    http:
+      enabled: true        
+        
+server:
+  port: 10000
+
+# um servidor
+spring:
+   cloud:
+     gateway:
+       routes:
+       - id: umaMaquina
+         uri: http://localhost:8081
+         predicates:
+         - Path=/rest/pedido/novo/**
