@@ -20,30 +20,30 @@ management:
 server:
   port: 10000
 
-# dois servidores equilibrado
-# servidor1 - peso 5
-# servidor2 - peso 5
+# dois servidores
+# servidor1 (maquina_boa) - peso 8
+# servidor2 (maquina_ruim) - peso 2
 spring:
   cloud:
     gateway:
       routes:
-      - id: servidor1
+      - id: servidor_maquina_boa
         uri: http://localhost:8081
         predicates:
-        - Weight=servidores, 5
+        - Weight=servidores, 8
         - Path=/server
-      - id: servidor1
+      - id: maquina_boa
         uri: http://localhost:8081
         predicates:
-        - Weight=servidoresDePedidos, 5
+        - Weight=servidoresDePedidos, 8
         - Path=/rest/pedido/novo/**
-      - id: servidor2
+      - id: servidor_maquina_ruim
         uri: http://localhost:8082
         predicates:
         - Path=/server
-        - Weight=servidores, 5
-      - id: servidor2
+        - Weight=servidores, 2
+      - id: maquina_ruim
         uri: http://localhost:8082
         predicates:
-        - Weight=servidoresDePedidos, 5
+        - Weight=servidoresDePedidos, 2
         - Path=/rest/pedido/novo/**
